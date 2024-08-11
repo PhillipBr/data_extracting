@@ -70,7 +70,7 @@ def find_songs_by_artist(song_id, artist, title):
 
 song_index_repair_files = glob.glob("../DATA/Songs_Index_REPAIR_*.json")
 for file in song_index_repair_files:
-    with open(file, "r") as f:
+    with open(file, "r", encoding="utf-8") as f:
         song_index_data = json.load(f)
         for song in song_index_data:
             song_id = str(song['SongID'])
@@ -81,5 +81,5 @@ for file in song_index_repair_files:
             find_songs_by_artist(song_id, song['Artist'], song['Title'])
             time.sleep(1)
 
-            with open(audio_features_file_path, "w") as f:
+            with open(audio_features_file_path, "w", encoding="utf-8") as f:
                 json.dump(list(audio_features_dict.values()), f, indent=4)
