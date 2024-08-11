@@ -13,11 +13,12 @@ if not token:
 
 sp = spotipy.Spotify(auth=token)
 
+# Corrected path for Songs_Index_REPAIR_2.json
 song_index_repair_files = glob.glob("../DATA/Songs_Index_REPAIR_1.json")
 
 repair_song_ids = set()
 for file in song_index_repair_files:
-    with open(file, "r") as f:
+    with open(file, "r", encoding="utf-8") as f:  # Specify UTF-8 encoding here
         song_index_data = json.load(f)
         repair_song_ids.update(str(song['SongID']) for song in song_index_data)
 
@@ -66,16 +67,17 @@ def find_songs_by_artist(song_id, artist, title):
     except SpotifyException as e:
         print(f"Spotify exception: {e}")
 
+# Corrected path for Tracks_Songs_tester.json
 tracks_songs_file_path = "../DATA/Tracks_Songs_tester.json"
 
 try:
-    with open(tracks_songs_file_path, "r") as f:
+    with open(tracks_songs_file_path, "r", encoding="utf-8") as f:  # Specify UTF-8 encoding here
         tracks_songs_dict = json.load(f)
 except (FileNotFoundError, json.JSONDecodeError):
     tracks_songs_dict = {}
 
 for file in song_index_repair_files:
-    with open(file, "r") as f:
+    with open(file, "r", encoding="utf-8") as f:  # Specify UTF-8 encoding here
         song_index_data = json.load(f)
         for song in song_index_data:
             song_id = str(song['SongID'])
@@ -84,7 +86,7 @@ for file in song_index_repair_files:
                 continue
             print(f"Searching for the track '{song['Title']}' by '{song['Artist']}'...")
             find_songs_by_artist(song_id, song['Artist'], song['Title'])
-            time.sleep(1)
+            time.sleep(1)  # To avoid rate limiting
 
-            with open(tracks_songs_file_path, "w") as f:
+            with open(tracks_songs_file_path, "w", encoding="utf-8") as f:  # Specify UTF-8 encoding here
                 json.dump(list(tracks_songs_dict.values()), f, indent=4)
